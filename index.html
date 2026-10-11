@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EAZYSTORE - Boutique Produit Tendance & Livraison 58 Wilayas</title>
+  <meta name="description" content="Découvrez les produits les plus vendus sur les réseaux sociaux. Livraison rapide à domicile dans les 58 wilayas avec paiement à la livraison.">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Lucide Icons: Clean, professional SVG icon set -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+
+  <!-- ==========================================
+       MAIN STOREFRONT VIEW
+       ========================================== -->
+  <div class="store-view">
+
+    <!-- Header / Navbar (Pixel Perfect to Screenshots) -->
+    <header class="header">
+      <div class="container">
+        <nav class="navbar">
+
+          <!-- Brand Logo -->
+          <a href="#" class="logo">
+            <div class="logo-icon"><i data-lucide="shopping-bag"></i></div>
+            <span>EAZYSTORE</span>
+          </a>
+
+          <!-- Working Product Search Bar -->
+          <form id="store-search-form" class="header-search-pill" role="search">
+            <i data-lucide="search" class="search-input-icon"></i>
+            <input 
+              type="text" 
+              id="store-search-input" 
+              class="header-search-input" 
+              placeholder="Rechercher un produit, catégorie..." 
+              autocomplete="off"
+              aria-label="Rechercher des produits"
+            >
+            <button type="button" id="btn-clear-search" class="search-clear-btn" style="display: none;" title="Effacer" aria-label="Effacer">
+              <i data-lucide="x" style="width:14px;height:14px;"></i>
+            </button>
+            <button type="submit" id="btn-store-search" class="search-btn" title="Rechercher" aria-label="Rechercher">
+              <i data-lucide="search" style="width:14px;height:14px;"></i>
+            </button>
+          </form>
+
+          <!-- Right Navigation Controls -->
+          <div class="nav-actions">
+            <div class="nav-pills">
+              <a href="#" class="nav-pill active" data-i18n="navHome">Accueil</a>
+              <a href="#products-section" class="nav-pill" data-i18n="navBrowse">Produits</a>
+            </div>
+
+            <!-- Language Switcher Pill (Matching Screenshots) -->
+            <div class="lang-toggle-pill">
+              <button class="lang-btn active" data-lang="FR">FR</button>
+              <button class="lang-btn" data-lang="EN">EN</button>
+              <button class="lang-btn" data-lang="AR">ع</button>
+            </div>
+
+            <!-- Discreet Admin Lock Trigger (Protected by password) -->
+            <button id="btn-admin-gate" class="admin-quick-lock-btn" title="Espace Administrateur (Privé)" aria-label="Espace Administrateur">
+              <span class="lock-icon"><i data-lucide="lock"></i></span>
+              <span class="lock-text">Admin</span>
+            </button>
+          </div>
+
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero Section (Matching Screenshot 2) -->
+    <section class="hero">
+      <div class="container">
+        
+        <!-- Big Headline -->
+        <h1 class="hero-title" data-i18n="heroTitle">
+          Trouvez Vos Produits Tendances Directement Chez Vous
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="hero-subtitle" data-i18n="heroSubtitle">
+          Parcourez nos meilleures offres sélectionnées sur les réseaux sociaux. Livraison express à domicile dans les 58 wilayas avec paiement à la livraison.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="hero-ctas">
+          <a href="#products-section" class="btn-pill btn-pill-dark" data-i18n="btnBrowse">
+            Parcourir les produits
+          </a>
+          <a href="#products-section" class="btn-pill btn-pill-outline" data-i18n="btnFastOrder">
+            Commander Rapidement
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Categories Selector Section (Matching Screenshot 1) -->
+    <section class="category-section">
+      <div class="container">
+
+        <div class="section-header">
+          <h2 class="section-title" data-i18n="catTitle">Parcourir par catégorie</h2>
+          <p class="section-subtitle" data-i18n="catSubtitle">Trouvez exactement ce que vous cherchez</p>
+        </div>
+
+        <!-- 6 Horizontal Category Cards -->
+        <div class="category-grid">
+          <div class="category-card active" data-category="all">
+            <div class="category-icon-wrapper"><i data-lucide="layout-grid"></i></div>
+            <span class="category-name">Tous les produits</span>
+          </div>
+
+          <div class="category-card" data-category="tech">
+            <div class="category-icon-wrapper"><i data-lucide="cpu"></i></div>
+            <span class="category-name">Électronique</span>
+          </div>
+
+          <div class="category-card" data-category="fashion">
+            <div class="category-icon-wrapper"><i data-lucide="shirt"></i></div>
+            <span class="category-name">Mode & Style</span>
+          </div>
+
+          <div class="category-card" data-category="beauty">
+            <div class="category-icon-wrapper"><i data-lucide="sparkles"></i></div>
+            <span class="category-name">Beauté & Soins</span>
+          </div>
+
+          <div class="category-card" data-category="home">
+            <div class="category-icon-wrapper"><i data-lucide="home"></i></div>
+            <span class="category-name">Maison & Déco</span>
+          </div>
+
+          <div class="category-card" data-category="promo">
+            <div class="category-icon-wrapper"><i data-lucide="percent"></i></div>
+            <span class="category-name">Promotions</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Products Showcase Grid -->
+    <section id="products-section" class="products-section">
+      <div class="container">
+        
+        <div class="products-grid-header">
+          <div>
+            <h2 style="font-size: 1.8rem; font-weight: 800;">Produits en Vedette</h2>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">Sélectionnés spécialement pour leur popularité sur Instagram & TikTok</p>
+          </div>
+        </div>
+
+        <!-- Dynamic Grid populated by app.js -->
+        <div id="products-grid" class="products-grid"></div>
+
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div>
+            <div class="logo" style="margin-bottom: 14px;">
+              <div class="logo-icon"><i data-lucide="shopping-bag"></i></div>
+              <span>EAZYSTORE</span>
+            </div>
+            <p style="font-size: 0.9rem; max-width: 320px; line-height: 1.6;">
+              Votre plateforme e-commerce de confiance pour les produits les plus tendances en Algérie. Livraison garantie 58 Wilayas.
+            </p>
+          </div>
+
+          <div>
+            <h4 class="footer-col-title">Navigation</h4>
+            <ul class="footer-links">
+              <li><a href="#">Accueil</a></li>
+              <li><a href="#products-section">Produits Tendances</a></li>
+              <li><a href="#products-section">Promotions du mois</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="footer-col-title">Livraison</h4>
+            <ul class="footer-links">
+              <li><a href="#">Couverture 58 Wilayas</a></li>
+              <li><a href="#">Paiement à la livraison</a></li>
+              <li><a href="#">Vérification du colis</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="footer-col-title">Support Client</h4>
+            <ul class="footer-links">
+              <li><a href="#">Téléphone: 0550 00 00 00</a></li>
+              <li><a href="#">WhatsApp: +213 550 000 000</a></li>
+              <li><a href="#">Service client 7j/7</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>© 2026 EAZYSTORE - Tous droits réservés. Conçu pour le commerce social en Algérie.</p>
+          <div class="footer-admin-link-wrap">
+            <button id="link-admin-footer" class="footer-admin-link">
+              <i data-lucide="shield" style="width:13px;height:13px;"></i> Espace Gérant
+            </button>
+            <span class="footer-shortcut-hint">Raccourci: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd></span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ==========================================
+       EXPRESS COD CHECKOUT MODAL
+       ========================================== -->
+  <div id="modal-overlay" class="modal-overlay">
+    <div class="modal-card">
+      
+      <button id="btn-close-modal" class="modal-close-btn">&times;</button>
+
+      <div class="modal-header-info">
+        <h3 class="modal-title" data-i18n="orderModalTitle">Commander - Paiement à la Livraison</h3>
+        <p class="modal-subtitle" data-i18n="orderModalSubtitle">Remplissez le formulaire ci-dessous. Notre équipe vous appellera pour confirmer.</p>
+      </div>
+
+      <!-- Selected Product Summary Box -->
+      <div class="order-summary-box">
+        <img id="modal-thumb" src="" alt="Product" class="order-thumb">
+        <div class="order-info-text">
+          <div id="modal-item-title" class="order-item-title">Product Title</div>
+          <div id="modal-item-price" class="order-item-price">0 DA</div>
+        </div>
+      </div>
+
+      <!-- Order Form -->
+      <form id="cod-order-form">
+        
+        <div class="form-group">
+          <label class="form-label" data-i18n="lblFullName">Nom & Prénom *</label>
+          <input type="text" id="input-name" class="form-input" placeholder="ex: Amine Mansouri" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" data-i18n="lblPhone">Numéro de Téléphone *</label>
+          <input type="tel" id="input-phone" class="form-input" placeholder="ex: 0554 12 34 56" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" data-i18n="lblWilaya">Wilaya de Livraison *</label>
+            <select id="select-wilaya" class="form-select" required></select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" data-i18n="lblQty">Quantité</label>
+            <div style="display: flex; align-items: center; border: 1px solid var(--border-color); border-radius: var(--radius-input); overflow: hidden; background: white;">
+              <button type="button" id="btn-qty-minus" style="padding: 10px 16px; border: none; background: #f1f5f9; font-weight: bold; cursor: pointer;">-</button>
+              <span id="input-qty" style="flex: 1; text-align: center; font-weight: 800;">1</span>
+              <button type="button" id="btn-qty-plus" style="padding: 10px 16px; border: none; background: #f1f5f9; font-weight: bold; cursor: pointer;">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" data-i18n="lblAddress">Adresse Exacte *</label>
+          <input type="text" id="input-address" class="form-input" placeholder="Cité, Numéro de rue, Commune" required>
+        </div>
+
+        <!-- Breakdown calculation -->
+        <div class="order-total-preview">
+          <div>
+            <div data-i18n="lblTotal">Total avec livraison:</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">Fraix livraison: <span id="lbl-shipping-cost">600 DA</span></div>
+          </div>
+          <div id="lbl-grand-total" class="total-amount">0 DA</div>
+        </div>
+
+        <button type="submit" class="btn-pill btn-pill-dark" style="width: 100%; padding: 14px; margin-top: 10px;" data-i18n="btnConfirmOrder">
+          Confirmer la Commande (COD)
+        </button>
+
+      </form>
+
+    </div>
+  </div>
+
+
+  <!-- ==========================================
+       ADMIN AUTHENTICATION GATE MODAL
+       ========================================== -->
+  <div id="admin-auth-modal" class="modal-overlay">
+    <div class="modal-card auth-modal-card">
+      <button id="btn-close-auth-modal" class="modal-close-btn">&times;</button>
+      
+      <div class="auth-header">
+        <div class="auth-icon-badge"><i data-lucide="lock"></i></div>
+        <h3 class="modal-title">Espace Administrateur</h3>
+        <p class="modal-subtitle">Accès protégé réservé au propriétaire de la boutique</p>
+      </div>
+
+      <form id="admin-login-form">
+        <div class="form-group">
+          <label class="form-label" for="admin-pin-input">Mot de passe / Code d'accès administrateur</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="admin-pin-input" class="form-input" placeholder="Entrez le mot de passe (ex: admin1234)" required autocomplete="current-password">
+            <button type="button" id="btn-toggle-pin-visibility" class="btn-toggle-eye" title="Afficher/Masquer le mot de passe"><i data-lucide="eye" id="eye-icon"></i></button>
+          </div>
+          <div id="admin-auth-error" class="auth-error-msg" style="display: none;">
+            <i data-lucide="alert-triangle" style="width:14px;height:14px;"></i> Mot de passe incorrect. Veuillez réessayer.
+          </div>
+          <div class="auth-helper-note">
+            <i data-lucide="info" style="width:13px;height:13px;vertical-align:middle;"></i> Mot de passe initial : <strong>admin1234</strong> (modifiable dans les paramètres)
+          </div>
+        </div>
+
+        <button type="submit" class="btn-pill btn-pill-dark" style="width: 100%; padding: 14px; margin-top: 10px;">
+          <i data-lucide="unlock" style="width:16px;height:16px;"></i> Déverrouiller le Panel
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ==========================================
+       ADMIN PANEL VIEW (PROTECTED)
+       ========================================== -->
+  <div class="admin-view">
+
+    <!-- Top Admin Bar -->
+    <div class="admin-topbar">
+      <div class="container admin-topbar-content">
+        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+          <button id="btn-back-store" class="btn-pill btn-pill-outline">
+            <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Voir la boutique
+          </button>
+          <span class="admin-badge"><i data-lucide="shield-check" style="width:12px;height:12px;"></i> Session Admin Active</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <h2 style="font-size: 1.25rem; font-weight: 800;" data-i18n="adminTitle">Tableau de Bord Administrateur</h2>
+          <button id="btn-logout-admin" class="btn-pill btn-pill-logout" title="Verrouiller et se déconnecter">
+            <i data-lucide="log-out" style="width:14px;height:14px;"></i> Déconnexion
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!-- Metrics Stats Grid -->
+      <div class="admin-stats-grid">
+        <div class="stat-card">
+          <div class="stat-header">
+            <span data-i18n="statSales">Ventes Totales</span>
+            <div class="stat-icon"><i data-lucide="banknote"></i></div>
+          </div>
+          <div id="stat-total-sales" class="stat-value">0 DA</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span data-i18n="statOrders">Commandes</span>
+            <div class="stat-icon"><i data-lucide="package"></i></div>
+          </div>
+          <div id="stat-total-orders" class="stat-value">0</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span data-i18n="statPending">En Attente</span>
+            <div class="stat-icon"><i data-lucide="clock"></i></div>
+          </div>
+          <div id="stat-pending-orders" class="stat-value" style="color: var(--accent-warning);">0</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span data-i18n="statProducts">Produits Actifs</span>
+            <div class="stat-icon"><i data-lucide="tag"></i></div>
+          </div>
+          <div id="stat-active-products" class="stat-value">0</div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="orders" data-i18n="tabOrders"><i data-lucide="package" class="tab-icon"></i> Commandes</button>
+        <button class="admin-tab" data-tab="products" data-i18n="tabProducts"><i data-lucide="tag" class="tab-icon"></i> Catalogue</button>
+        <button class="admin-tab" data-tab="settings" data-i18n="tabSettings"><i data-lucide="settings" class="tab-icon"></i> Paramètres</button>
+      </div>
+
+      <!-- TAB 1: ORDERS MANAGEMENT -->
+      <div id="tab-orders" class="admin-tab-content active">
+        <div class="table-card">
+          <div class="table-header-bar">
+            <h3 style="font-size: 1.1rem; font-weight: 800;">Commandes Récentes (Paiement à la Livraison)</h3>
+            <span id="orders-count-badge" class="badge-counter">0 commandes</span>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>ID Commande</th>
+                  <th>Client & Téléphone</th>
+                  <th>Produit Commandé</th>
+                  <th>Wilaya</th>
+                  <th>Montant Total</th>
+                  <th>Statut</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-orders-tbody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: PRODUCTS CATALOG MANAGEMENT -->
+      <div id="tab-products" class="admin-tab-content">
+        
+        <!-- Two Column Product Creator & Live Preview -->
+        <div class="product-editor-layout">
+          
+          <!-- Column 1: Add / Edit Product Form -->
+          <div class="admin-card-box editor-form-card">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+              <h3 id="form-product-mode-title" style="font-size: 1.25rem; font-weight: 800;"><i data-lucide="plus-circle" style="width:18px;height:18px;vertical-align:middle;"></i> Ajouter un Nouveau Produit</h3>
+              <button type="button" id="btn-cancel-edit-prod" class="btn-pill btn-pill-outline" style="display: none; padding: 6px 14px; font-size: 0.8rem;">
+                <i data-lucide="x" style="width:12px;height:12px;"></i> Annuler
+              </button>
+            </div>
+
+            <form id="add-product-form">
+              <input type="hidden" id="prod-edit-id" value="">
+
+              <div class="form-row">
+                <div class="form-group" style="flex: 2;">
+                  <label class="form-label" for="prod-title">Nom du produit *</label>
+                  <input type="text" id="prod-title" class="form-input" placeholder="ex: Écouteurs Sans Fil Pro Bass" required>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                  <label class="form-label" for="prod-category">Catégorie *</label>
+                  <select id="prod-category" class="form-select" required>
+                    <option value="tech">Électronique</option>
+                    <option value="fashion">Mode & Style</option>
+                    <option value="beauty">Beauté & Soins</option>
+                    <option value="home">Maison & Déco</option>
+                    <option value="promo">Promotions</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="prod-price">Prix de Vente (DA) *</label>
+                  <input type="number" id="prod-price" class="form-input" placeholder="ex: 4500" min="100" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="prod-oldprice">Ancien Prix Barré (DA)</label>
+                  <input type="number" id="prod-oldprice" class="form-input" placeholder="ex: 6500 (Optionnel)">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="prod-stock">Disponibilité</label>
+                  <select id="prod-stock" class="form-select">
+                    <option value="in_stock">En Stock</option>
+                    <option value="limited">Stock Limité</option>
+                    <option value="out">Rupture de Stock</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Image Source Section (Device Upload OR URL OR Presets) -->
+              <div class="form-group">
+                <label class="form-label">Photo du Produit *</label>
+                
+                <!-- Direct Device Upload Zone -->
+                <div class="image-upload-zone" id="upload-zone">
+                  <input type="file" id="prod-file-input" accept="image/*" class="file-input-hidden">
+                  <div class="upload-zone-content">
+                    <div class="upload-icon"><i data-lucide="image"></i></div>
+                    <div class="upload-title">Cliquez pour importer une photo depuis votre appareil</div>
+                    <div class="upload-sub">Accepte JPG, PNG, WEBP depuis votre PC ou smartphone</div>
+                    <button type="button" id="btn-trigger-file" class="btn-pill btn-pill-outline" style="margin-top: 10px; font-size: 0.85rem;">
+                      <i data-lucide="folder-open" style="width:14px;height:14px;"></i> Choisir un fichier
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Or URL Input -->
+                <div style="margin-top: 12px;">
+                  <label class="form-label" style="font-size: 0.8rem; color: var(--text-muted);" for="prod-image">
+                    Ou collez l'URL d'une image web :
+                  </label>
+                  <input type="url" id="prod-image" class="form-input" placeholder="https://images.unsplash.com/...">
+                </div>
+
+                <!-- Quick Preset Images -->
+                <div class="presets-wrap">
+                  <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted);">Exemples rapides :</span>
+                  <div class="preset-buttons">
+                    <button type="button" class="preset-btn" data-url="assets/images/headphone.jpg">Casque</button>
+                    <button type="button" class="preset-btn" data-url="assets/images/smartwatch.jpg">Montre</button>
+                    <button type="button" class="preset-btn" data-url="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80">Sérum</button>
+                    <button type="button" class="preset-btn" data-url="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=600&q=80">Lunettes</button>
+                    <button type="button" class="preset-btn" data-url="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80">Projecteur</button>
+                  </div>
+                </div>
+              </div>
+
+            <div class="form-row">
+                <div class="form-group" style="flex: 1;">
+                  <label class="form-label" for="prod-badge">Badge</label>
+                  <input type="text" id="prod-badge" class="form-input" placeholder="Écrivez le badge personnalisé (ou laissez vide)..." maxlength="40">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="prod-desc">Description courte du produit</label>
+                <textarea id="prod-desc" class="form-input form-textarea" rows="3" placeholder="Avantages clés, autonomie, qualité, accessoires inclus..."></textarea>
+              </div>
+
+              <div style="display: flex; gap: 12px; margin-top: 14px;">
+                <button type="submit" id="btn-save-prod" class="btn-pill btn-pill-dark" style="flex: 1; padding: 14px;">
+                  <i data-lucide="save" style="width:15px;height:15px;"></i> Enregistrer le Produit
+                </button>
+                <button type="button" id="btn-reset-prod-form" class="btn-pill btn-pill-outline" style="padding: 14px 20px;">
+                  Réinitialiser
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Column 2: Sticky Real-Time Live Preview -->
+          <div class="preview-column">
+            <div class="preview-sticky-card">
+              <div class="preview-header">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <i data-lucide="eye" style="width:16px;height:16px;"></i>
+                  <span style="font-weight: 800; font-size: 0.95rem;">Aperçu en Direct dans la Boutique</span>
+                </div>
+                <span class="preview-badge">Temps Réel</span>
+              </div>
+
+              <!-- Card Replica -->
+              <div class="product-card preview-card-inner">
+                <div class="product-image-container">
+                  <img id="preview-image" src="assets/images/headphone.jpg" alt="Aperçu" class="product-image">
+                  <span id="preview-badge" class="product-badge viral" style="display: none;"></span>
+                </div>
+                <div class="product-content">
+                  <div id="preview-category" class="product-category">Électronique</div>
+                  <h3 id="preview-title" class="product-title">Nom du produit</h3>
+                  <div class="product-rating">
+                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                    <span class="product-rating-count">(45 avis)</span>
+                  </div>
+                  <div class="product-price-row">
+                    <span id="preview-price" class="current-price">4 500 DA</span>
+                    <span id="preview-oldprice" class="old-price" style="display: inline;">6 500 DA</span>
+                    <span id="preview-discount" class="discount-pill">-31%</span>
+                  </div>
+                  <p id="preview-desc" style="font-size: 0.8rem; color: var(--text-secondary); margin: 6px 0 12px 0; line-height: 1.4;">
+                    Description de votre produit...
+                  </p>
+                  <button class="btn-pill btn-pill-dark btn-buy-now" style="pointer-events: none; opacity: 0.9;">
+                    Commander (COD)
+                  </button>
+                </div>
+              </div>
+
+              <div class="preview-footnote">
+                <i data-lucide="info" style="width:13px;height:13px;"></i> C'est exactement comme cela que vos clients verront ce produit.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Current Products List Section -->
+        <div class="admin-card-box" style="margin-top: 30px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
+            <div>
+              <h3 style="font-size: 1.25rem; font-weight: 800;"><i data-lucide="list" style="width:18px;height:18px;vertical-align:middle;"></i> Catalogue Actuel</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">Cliquez sur "Modifier" pour éditer n'importe quel produit en un clic.</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <input type="text" id="admin-search-prod" class="form-input" placeholder="Rechercher un produit..." style="width: 240px; padding: 8px 14px; font-size: 0.88rem;">
+              <span id="admin-prod-count" class="badge-counter">0 produits</span>
+            </div>
+          </div>
+
+          <div id="admin-products-list" class="admin-products-list-wrap">
+            <!-- Dynamic products rendering with edit & delete -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB 3: SETTINGS (Password only) -->
+      <div id="tab-settings" class="admin-tab-content">
+        <div class="settings-grid" style="max-width: 520px;">
+          <!-- Password Change Card -->
+          <div class="admin-card-box">
+            <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 14px;"><i data-lucide="key" style="width:16px;height:16px;vertical-align:middle;"></i> Sécurité : Mot de Passe Admin</h3>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 18px;">
+              Changez le mot de passe requis pour déverrouiller cet espace administrateur.
+            </p>
+            <form id="change-pin-form">
+              <div class="form-group">
+                <label class="form-label" for="input-current-pin">Mot de passe actuel</label>
+                <input type="password" id="input-current-pin" class="form-input" placeholder="Mot de passe actuel" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="input-new-pin">Nouveau mot de passe</label>
+                <input type="password" id="input-new-pin" class="form-input" placeholder="Nouveau mot de passe (min. 4 caractères)" required>
+              </div>
+              <button type="submit" class="btn-pill btn-pill-dark">
+                Enregistrer le Nouveau Mot de Passe
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Toast Notification Area -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Database Layer (Supabase Cloud DB + Local Fallback) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="db.js"></script>
+  <!-- App Script -->
+  <script src="app.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>
