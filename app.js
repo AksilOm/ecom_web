@@ -273,6 +273,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderAdminProducts();
   updateAdminStats();
   if (typeof lucide !== 'undefined') lucide.createIcons();
+
+  // Check URL route for /admin or #admin access
+  checkAdminRoute();
 });
 
 // Event Listeners Setup
@@ -325,9 +328,11 @@ function setupEventListeners() {
     });
   });
 
-  // Admin Access Triggers (Protected by Password Modal)
-  document.getElementById("btn-admin-gate")?.addEventListener("click", openAdminAuthModal);
-  document.getElementById("link-admin-footer")?.addEventListener("click", openAdminAuthModal);
+  // URL Route change listeners for /admin navigation
+  window.addEventListener("hashchange", checkAdminRoute);
+  window.addEventListener("popstate", checkAdminRoute);
+
+  // Admin Topbar Controls
   document.getElementById("btn-back-store")?.addEventListener("click", () => toggleAdminView(false));
   document.getElementById("btn-logout-admin")?.addEventListener("click", logoutAdmin);
 
@@ -338,14 +343,6 @@ function setupEventListeners() {
   });
   document.getElementById("admin-login-form")?.addEventListener("submit", handleAdminLogin);
   document.getElementById("btn-toggle-pin-visibility")?.addEventListener("click", togglePinVisibility);
-
-  // Admin Global Keyboard Shortcut: Ctrl + Shift + A
-  window.addEventListener("keydown", (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "A" || e.key === "a")) {
-      e.preventDefault();
-      openAdminAuthModal();
-    }
-  });
 
   // Admin Tabs
   document.querySelectorAll(".admin-tab").forEach(tab => {
@@ -604,6 +601,33 @@ async function handleOrderSubmit(e) {
 }
 
 // Admin Panel Security & Authentication Helpers
+// Admin Panel Security & URL Route Helpers
+function isAdminUrlRequested() {
+  const path = window.location.pathname.toLowerCase();
+  const hash = window.location.hash.toLowerCase();
+  const search = window.location.search.toLowerCase();
+  return path.endsWith("/admin") || path.endsWith("/admin/") || hash === "#admin" || search.includes("admin");
+}
+
+function cleanAdminUrl() {
+  if (window.location.hash === "#admin") {
+    history.pushState(null, "", window.location.pathname + window.location.search);
+  } else if (window.location.pathname.endsWith("/admin") || window.location.pathname.endsWith("/admin/")) {
+    const cleanPath = window.location.pathname.replace(/\/admin\/?$/, "") || "/";
+    history.pushState(null, "", cleanPath);
+  }
+}
+
+function checkAdminRoute() {
+  if (isAdminUrlRequested()) {
+    if (!state.adminAuthenticated) {
+      openAdminAuthModal();
+    } else {
+      toggleAdminView(true);
+    }
+  }
+}
+
 function getStoredAdminPin() {
   return localStorage.getItem("eazy_admin_pin") || DEFAULT_ADMIN_PIN;
 }
@@ -627,6 +651,10 @@ function openAdminAuthModal() {
 
 function closeAdminAuthModal() {
   document.getElementById("admin-auth-modal")?.classList.remove("active");
+  // If user is not authenticated and still on /admin route, clean the URL back to storefront
+  if (!state.adminAuthenticated && isAdminUrlRequested()) {
+    cleanAdminUrl();
+  }
 }
 
 function togglePinVisibility() {
@@ -668,6 +696,7 @@ function logoutAdmin() {
   state.adminAuthenticated = false;
   sessionStorage.removeItem("eazy_admin_auth");
   toggleAdminView(false);
+  cleanAdminUrl();
   showToast("Session verrouillée et sécurisée.", "check");
 }
 
@@ -721,6 +750,7 @@ function toggleAdminView(forceState) {
   } else {
     adminView.classList.remove("active");
     storeView.classList.remove("hidden");
+    cleanAdminUrl();
     window.scrollTo(0, 0);
   }
 }

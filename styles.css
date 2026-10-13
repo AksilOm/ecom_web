@@ -55,13 +55,27 @@
   padding: 0;
 }
 
+html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   font-family: var(--font-primary);
   background-color: var(--bg-main);
   color: var(--text-primary);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  width: 100%;
+  max-width: 100%;
   overflow-x: hidden;
+  position: relative;
+}
+
+img, svg, video {
+  max-width: 100%;
 }
 
 /* Container */
@@ -70,6 +84,12 @@ body {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 24px;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 16px;
+  }
 }
 
 /* ==========================================================================
@@ -618,12 +638,11 @@ body {
    ========================================================================== */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(6px);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(8px);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -631,7 +650,8 @@ body {
   opacity: 0;
   visibility: hidden;
   transition: var(--transition-normal);
-  padding: 20px;
+  padding: 16px;
+  overflow-y: auto;
 }
 
 .modal-overlay.active {
@@ -644,13 +664,14 @@ body {
   border-radius: 24px;
   width: 100%;
   max-width: 540px;
-  max-height: 90vh;
+  max-height: calc(100vh - 32px);
   overflow-y: auto;
   padding: 32px;
   box-shadow: var(--shadow-lg);
   transform: translateY(20px);
   transition: var(--transition-normal);
   position: relative;
+  margin: auto;
 }
 
 .modal-overlay.active .modal-card {
@@ -1465,16 +1486,20 @@ body {
     grid-template-columns: repeat(3, 1fr);
   }
   .hero-title {
-    font-size: 2.7rem;
+    font-size: 2.6rem;
   }
   .admin-stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
   .footer-content {
     grid-template-columns: 1fr 1fr;
+    gap: 30px;
   }
   .product-editor-layout {
     grid-template-columns: 1fr;
+  }
+  .preview-sticky-card {
+    position: static;
   }
   .settings-grid {
     grid-template-columns: 1fr;
@@ -1482,31 +1507,80 @@ body {
 }
 
 @media (max-width: 768px) {
+  .header {
+    padding: 12px 0;
+  }
   .navbar {
+    display: flex;
     flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .logo {
+    order: 1;
+    font-size: 1.25rem;
+  }
+  .nav-actions {
+    order: 2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
   .header-search-pill {
     order: 3;
     width: 100%;
-    margin-top: 12px;
+    max-width: 100%;
+    margin-top: 6px;
+  }
+  .hero {
+    padding: 48px 0 32px 0;
   }
   .hero-title {
-    font-size: 2.1rem;
+    font-size: clamp(1.8rem, 6vw, 2.4rem);
+    letter-spacing: -0.8px;
+    line-height: 1.25;
+  }
+  .hero-subtitle {
+    font-size: 1rem;
+    margin-bottom: 28px;
   }
   .category-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
   .products-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
   .form-row {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .admin-topbar-content {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
   }
   .admin-stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .admin-tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+    gap: 8px;
+  }
+  .admin-tab {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    font-size: 0.85rem;
   }
   .footer-content {
     grid-template-columns: 1fr;
+    gap: 28px;
   }
   .admin-prod-item {
     flex-direction: column;
@@ -1515,6 +1589,161 @@ body {
   .admin-actions-btns {
     width: 100%;
     justify-content: flex-end;
+  }
+}
+
+@media (max-width: 540px) {
+  .nav-pills {
+    display: none; /* Keeps mobile header clean: Logo left, Language right, Search full width below */
+  }
+  .logo-icon {
+    width: 34px;
+    height: 34px;
+    font-size: 1rem;
+  }
+  .logo {
+    font-size: 1.15rem;
+    gap: 8px;
+  }
+  .lang-btn {
+    padding: 4px 8px;
+    font-size: 0.74rem;
+  }
+  .header-search-pill {
+    padding: 4px 6px 4px 12px;
+  }
+  .header-search-input {
+    font-size: 0.85rem;
+  }
+  .hero {
+    padding: 36px 0 24px 0;
+  }
+  .hero-badge {
+    font-size: 0.78rem;
+    padding: 5px 14px;
+    margin-bottom: 12px;
+  }
+  .hero-title {
+    font-size: clamp(1.55rem, 6.8vw, 2.1rem);
+    line-height: 1.25;
+    margin-bottom: 12px;
+  }
+  .hero-subtitle {
+    font-size: 0.88rem;
+    line-height: 1.55;
+    margin-bottom: 22px;
+  }
+  .hero-ctas {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+  .hero-ctas .btn-pill {
+    width: 100%;
+    padding: 13px 18px;
+    font-size: 0.92rem;
+    justify-content: center;
+  }
+  .category-section {
+    padding: 36px 0;
+  }
+  .section-header {
+    margin-bottom: 20px;
+  }
+  .section-title {
+    font-size: 1.5rem;
+  }
+  .section-subtitle {
+    font-size: 0.85rem;
+  }
+  .category-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .category-card {
+    padding: 14px 10px;
+    gap: 8px;
+    border-radius: 16px;
+  }
+  .category-icon-wrapper {
+    width: 44px;
+    height: 44px;
+  }
+  .category-name {
+    font-size: 0.8rem;
+  }
+  .products-section {
+    padding: 36px 0;
+  }
+  .products-grid-header h2 {
+    font-size: 1.35rem;
+  }
+  .product-image-container {
+    height: 210px;
+  }
+  .product-content {
+    padding: 15px;
+  }
+  .product-title {
+    font-size: 1.02rem;
+  }
+  .current-price {
+    font-size: 1.25rem;
+  }
+  .modal-card {
+    padding: 20px 14px;
+    border-radius: 18px;
+  }
+  .modal-title {
+    font-size: 1.2rem;
+  }
+  .modal-subtitle {
+    font-size: 0.82rem;
+  }
+  .order-summary-box {
+    padding: 10px;
+    gap: 10px;
+  }
+  .order-thumb {
+    width: 50px;
+    height: 50px;
+  }
+  .order-total-preview {
+    font-size: 0.95rem;
+  }
+  .total-amount {
+    font-size: 1.15rem;
+  }
+  .footer {
+    padding: 36px 0 20px 0;
+  }
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    text-align: center;
+  }
+  .footer-content .logo {
+    justify-content: center;
+  }
+  .footer-links {
+    align-items: center;
+  }
+  .admin-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .stat-card {
+    padding: 16px;
+  }
+  .admin-card-box {
+    padding: 16px;
+    border-radius: 16px;
+  }
+  .table-card {
+    border-radius: 16px;
+  }
+  .preset-buttons {
+    gap: 6px;
   }
 }
 

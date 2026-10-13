@@ -13,8 +13,8 @@
  */
 
 const SUPABASE_CONFIG = {
-  url: "",      // e.g. "https://abcdefghijklm.supabase.co"
-  anonKey: ""   // e.g. "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  url: "https://nairuuwqcuuxtabkcxdr.supabase.co",      // e.g. "https://abcdefghijklm.supabase.co"
+  anonKey: "sb_publishable_1Ew1zFJ_vHB0tDfoAj7x7Q_uYP_Ssgo"   // e.g. "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 };
 
 // Internal Supabase client instance (if configured)
@@ -22,9 +22,7 @@ let supabaseClient = null;
 if (typeof supabase !== "undefined" && SUPABASE_CONFIG.url && SUPABASE_CONFIG.anonKey) {
   try {
     supabaseClient = supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
-    console.info("⚡ EAZYSTORE: Connected to Supabase Cloud Database!");
   } catch (err) {
-    console.warn("⚠️ Failed to initialize Supabase client, falling back to LocalStorage:", err);
     supabaseClient = null;
   }
 }
@@ -64,7 +62,7 @@ const DB = {
           }));
         }
       } catch (err) {
-        console.warn("Could not fetch products from Supabase, falling back to local:", err);
+        // Fallback silently to local cache
       }
     }
 
@@ -171,7 +169,7 @@ const DB = {
           }));
         }
       } catch (err) {
-        console.warn("Could not fetch orders from Supabase, falling back to local:", err);
+        // Fallback silently to local cache
       }
     }
 
