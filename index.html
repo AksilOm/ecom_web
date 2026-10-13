@@ -206,6 +206,131 @@
   </div>
 
   <!-- ==========================================
+       PRODUCT DETAILS FULL-SCREEN / DRAWER MODAL
+       ========================================== -->
+  <div id="product-drawer-overlay" class="product-drawer-overlay" aria-hidden="true">
+    <div class="product-drawer-backdrop" id="product-drawer-backdrop"></div>
+    <div class="product-drawer-container" role="dialog" aria-modal="true" aria-labelledby="drawer-product-title">
+      
+      <!-- Drawer Header Bar -->
+      <div class="product-drawer-header">
+        <button type="button" id="btn-close-product-drawer" class="btn-drawer-close" title="Fermer" aria-label="Fermer">
+          <i data-lucide="arrow-left" class="drawer-back-icon"></i>
+          <span class="drawer-back-text">Retour aux produits</span>
+          <i data-lucide="x" class="drawer-close-x-icon"></i>
+        </button>
+        <div class="drawer-header-actions">
+          <button type="button" id="btn-share-product" class="btn-drawer-icon" title="Partager le produit" aria-label="Partager ce produit">
+            <i data-lucide="share-2"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Drawer Scrollable Body -->
+      <div class="product-drawer-body">
+        
+        <div class="product-drawer-grid">
+          
+          <!-- Column 1: Product Visuals & Trust Perks -->
+          <div class="drawer-media-col">
+            <div class="drawer-image-box">
+              <img id="drawer-product-image" src="" alt="Produit" class="drawer-main-image">
+              <span id="drawer-product-badge" class="drawer-badge" style="display: none;"></span>
+            </div>
+
+            <!-- Trust Highlights Grid -->
+            <div class="drawer-trust-box">
+              <div class="trust-item">
+                <div class="trust-icon"><i data-lucide="truck"></i></div>
+                <div>
+                  <div class="trust-title">Livraison 58 Wilayas</div>
+                  <div class="trust-sub">Express à domicile sous 24h à 48h</div>
+                </div>
+              </div>
+              <div class="trust-item">
+                <div class="trust-icon"><i data-lucide="banknote"></i></div>
+                <div>
+                  <div class="trust-title">Paiement à la Livraison</div>
+                  <div class="trust-sub">Payez en espèces à la réception (COD)</div>
+                </div>
+              </div>
+              <div class="trust-item">
+                <div class="trust-icon"><i data-lucide="shield-check"></i></div>
+                <div>
+                  <div class="trust-title">Vérification du Colis</div>
+                  <div class="trust-sub">Testez et vérifiez avant de payer le livreur</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 2: Product Info & Purchase Actions -->
+          <div class="drawer-info-col">
+            <div class="drawer-category-pill" id="drawer-product-category">ÉLECTRONIQUE</div>
+            <h1 class="drawer-product-title" id="drawer-product-title">Titre du produit</h1>
+            
+            <div class="drawer-rating-row">
+              <div class="rating-stars" id="drawer-product-stars">★★★★★</div>
+              <span class="rating-value" id="drawer-product-rating-num">4.9</span>
+              <span class="rating-count" id="drawer-product-reviews">(128 avis vérifiés)</span>
+              <span class="stock-pill stock-in" id="drawer-product-stock"><i data-lucide="check-circle-2"></i> En Stock</span>
+            </div>
+
+            <!-- Pricing Row -->
+            <div class="drawer-price-card">
+              <div class="drawer-prices">
+                <span class="drawer-current-price" id="drawer-product-price">0 DA</span>
+                <span class="drawer-old-price" id="drawer-product-oldprice">0 DA</span>
+                <span class="drawer-discount-tag" id="drawer-product-discount">-25%</span>
+              </div>
+              <div class="drawer-savings" id="drawer-product-savings">
+                🎉 Vous économisez <strong id="drawer-savings-amount">0 DA</strong> sur cette offre !
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="drawer-section-block">
+              <h4 class="drawer-section-title">Description & Caractéristiques</h4>
+              <p class="drawer-description-text" id="drawer-product-desc"></p>
+            </div>
+
+            <!-- Quantity & Actions Box -->
+            <div class="drawer-purchase-box">
+              <div class="drawer-qty-row">
+                <span class="drawer-qty-label">Quantité :</span>
+                <div class="qty-counter-control">
+                  <button type="button" id="drawer-qty-minus" class="btn-qty-step" aria-label="Diminuer">-</button>
+                  <span id="drawer-qty-display" class="qty-step-value">1</span>
+                  <button type="button" id="drawer-qty-plus" class="btn-qty-step" aria-label="Augmenter">+</button>
+                </div>
+                <div class="drawer-subtotal-text">
+                  Total : <strong id="drawer-subtotal-price">0 DA</strong>
+                </div>
+              </div>
+
+              <!-- Main CTA Buttons -->
+              <div class="drawer-cta-stack">
+                <button type="button" id="btn-drawer-buy-now" class="btn-pill btn-pill-dark btn-drawer-cta">
+                  <i data-lucide="shopping-bag"></i>
+                  <span>Commander Maintenant (Paiement à la Livraison)</span>
+                </button>
+                <a id="btn-drawer-whatsapp" href="#" target="_blank" rel="noopener" class="btn-pill btn-pill-whatsapp">
+                  <i data-lucide="message-circle"></i>
+                  <span>Commander via WhatsApp</span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================
        EXPRESS COD CHECKOUT MODAL
        ========================================== -->
   <div id="modal-overlay" class="modal-overlay">

@@ -244,6 +244,8 @@ let state = {
   products: DEFAULT_PRODUCTS,
   orders: DEFAULT_ORDERS,
   selectedProductForOrder: null,
+  selectedDrawerProduct: null,
+  drawerQty: 1,
   orderQty: 1,
   adminAuthenticated: sessionStorage.getItem("eazy_admin_auth") === "true",
   editingProductId: null,
@@ -274,8 +276,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   updateAdminStats();
   if (typeof lucide !== 'undefined') lucide.createIcons();
 
-  // Check URL route for /admin or #admin access
-  checkAdminRoute();
+  // Check URL routes for /admin or #product access
+  checkUrlRoutes();
 });
 
 // Event Listeners Setup
@@ -328,9 +330,32 @@ function setupEventListeners() {
     });
   });
 
-  // URL Route change listeners for /admin navigation
-  window.addEventListener("hashchange", checkAdminRoute);
-  window.addEventListener("popstate", checkAdminRoute);
+  // URL Route change listeners for /admin and #product navigation
+  window.addEventListener("hashchange", checkUrlRoutes);
+  window.addEventListener("popstate", checkUrlRoutes);
+
+  // Product Details Drawer Listeners
+  document.getElementById("btn-close-product-drawer")?.addEventListener("click", closeProductDrawer);
+  document.getElementById("product-drawer-backdrop")?.addEventListener("click", closeProductDrawer);
+  document.getElementById("btn-share-product")?.addEventListener("click", shareProduct);
+  document.getElementById("drawer-qty-minus")?.addEventListener("click", () => {
+    if (state.drawerQty > 1) {
+      state.drawerQty--;
+      updateDrawerSubtotal();
+    }
+  });
+  document.getElementById("drawer-qty-plus")?.addEventListener("click", () => {
+    state.drawerQty++;
+    updateDrawerSubtotal();
+  });
+  document.getElementById("btn-drawer-buy-now")?.addEventListener("click", () => {
+    if (state.selectedDrawerProduct) {
+      const prodId = state.selectedDrawerProduct.id;
+      const qty = state.drawerQty;
+      closeProductDrawer();
+      openOrderModal(prodId, qty);
+    }
+  });
 
   // Admin Topbar Controls
   document.getElementById("btn-back-store")?.addEventListener("click", () => toggleAdminView(false));
@@ -449,7 +474,7 @@ function renderProducts() {
   }
 
   grid.innerHTML = filtered.map(p => `
-    <div class="product-card">
+    <div class="product-card" onclick="openProductDrawer(${p.id})">
       <div class="product-image-container">
         <img src="${p.image}" alt="${p.title}" class="product-image" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80'">
         ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
@@ -465,9 +490,14 @@ function renderProducts() {
           <span class="current-price">${p.price.toLocaleString()} DA</span>
           ${p.oldPrice ? `<span class="old-price">${p.oldPrice.toLocaleString()} DA</span>` : ''}
         </div>
-        <button class="btn-pill btn-pill-dark btn-buy-now" onclick="openOrderModal(${p.id})">
-          ${ICONS.cart} Commander maintenant
-        </button>
+        <div class="product-card-actions">
+          <button type="button" class="btn-pill btn-pill-outline btn-card-details" onclick="event.stopPropagation(); openProductDrawer(${p.id})">
+            Voir Détails
+          </button>
+          <button type="button" class="btn-pill btn-pill-dark btn-buy-now" onclick="event.stopPropagation(); openOrderModal(${p.id})">
+            ${ICONS.cart} Commander
+          </button>
+        </div>
       </div>
     </div>
   `).join('');
@@ -502,12 +532,12 @@ function initWilayaSelect() {
 }
 
 // Open Instant COD Order Modal
-function openOrderModal(productId) {
+function openOrderModal(productId, initialQty = 1) {
   const product = state.products.find(p => p.id === productId);
   if (!product) return;
 
   state.selectedProductForOrder = product;
-  state.orderQty = 1;
+  state.orderQty = initialQty && initialQty > 0 ? initialQty : 1;
 
   document.getElementById("modal-thumb").src = product.image;
   document.getElementById("modal-item-title").textContent = product.title;
@@ -522,6 +552,194 @@ function openOrderModal(productId) {
 
 function closeModal() {
   document.getElementById("modal-overlay")?.classList.remove("active");
+}
+
+// ==========================================
+// PRODUCT DETAILS FULL-SCREEN / DRAWER MODAL
+// ==========================================
+function openProductDrawer(productId, pushHistory = true) {
+  const product = state.products.find(p => p.id === productId);
+  if (!product) return;
+
+  state.selectedDrawerProduct = product;
+  state.drawerQty = 1;
+
+  const overlay = document.getElementById("product-drawer-overlay");
+  const imgEl = document.getElementById("drawer-product-image");
+  const badgeEl = document.getElementById("drawer-product-badge");
+  const catEl = document.getElementById("drawer-product-category");
+  const titleEl = document.getElementById("drawer-product-title");
+  const starsEl = document.getElementById("drawer-product-stars");
+  const ratingNumEl = document.getElementById("drawer-product-rating-num");
+  const reviewsEl = document.getElementById("drawer-product-reviews");
+  const stockEl = document.getElementById("drawer-product-stock");
+  const priceEl = document.getElementById("drawer-product-price");
+  const oldPriceEl = document.getElementById("drawer-product-oldprice");
+  const discountEl = document.getElementById("drawer-product-discount");
+  const savingsBox = document.getElementById("drawer-product-savings");
+  const savingsAmountEl = document.getElementById("drawer-savings-amount");
+  const descEl = document.getElementById("drawer-product-desc");
+
+  if (imgEl) {
+    imgEl.src = product.image;
+    imgEl.alt = product.title;
+    imgEl.onerror = () => { imgEl.src = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80'; };
+  }
+
+  if (badgeEl) {
+    if (product.badge) {
+      badgeEl.textContent = product.badge;
+      badgeEl.style.display = "inline-block";
+    } else {
+      badgeEl.style.display = "none";
+    }
+  }
+
+  if (catEl) {
+    const catLabels = {
+      tech: "Électronique & High-Tech",
+      fashion: "Mode & Style",
+      beauty: "Beauté & Soins Personnels",
+      home: "Maison & Décoration",
+      promo: "Offre Spéciale / Promotion"
+    };
+    catEl.textContent = catLabels[product.category] || (product.category ? product.category.toUpperCase() : "PRODUIT TENDANCE");
+  }
+
+  if (titleEl) titleEl.textContent = product.title;
+  if (starsEl) starsEl.textContent = "★★★★★";
+  if (ratingNumEl) ratingNumEl.textContent = (product.rating || 5.0).toFixed(1);
+  if (reviewsEl) reviewsEl.textContent = `(${product.reviews || 45} avis vérifiés)`;
+
+  if (stockEl) {
+    if (product.stock === "out") {
+      stockEl.className = "stock-pill stock-out";
+      stockEl.innerHTML = `<i data-lucide="x-circle"></i> Rupture de stock`;
+    } else if (product.stock === "limited") {
+      stockEl.className = "stock-pill stock-limited";
+      stockEl.innerHTML = `<i data-lucide="alert-circle"></i> Stock limité`;
+    } else {
+      stockEl.className = "stock-pill stock-in";
+      stockEl.innerHTML = `<i data-lucide="check-circle-2"></i> En Stock - Expédié sous 24h`;
+    }
+  }
+
+  if (priceEl) priceEl.textContent = `${product.price.toLocaleString()} DA`;
+
+  if (product.oldPrice && product.oldPrice > product.price) {
+    if (oldPriceEl) {
+      oldPriceEl.textContent = `${product.oldPrice.toLocaleString()} DA`;
+      oldPriceEl.style.display = "inline";
+    }
+    const discountPct = Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100);
+    if (discountEl) {
+      discountEl.textContent = `-${discountPct}%`;
+      discountEl.style.display = "inline-block";
+    }
+    const diff = product.oldPrice - product.price;
+    if (savingsBox && savingsAmountEl) {
+      savingsAmountEl.textContent = `${diff.toLocaleString()} DA`;
+      savingsBox.style.display = "block";
+    }
+  } else {
+    if (oldPriceEl) oldPriceEl.style.display = "none";
+    if (discountEl) discountEl.style.display = "none";
+    if (savingsBox) savingsBox.style.display = "none";
+  }
+
+  if (descEl) {
+    descEl.textContent = product.description || "Produit premium sélectionné avec soin pour sa qualité supérieure et son succès viral sur les réseaux sociaux. Commandez en toute confiance avec livraison express sécurisée à domicile dans les 58 wilayas et paiement en espèces à la livraison après inspection.";
+  }
+
+  updateDrawerSubtotal();
+
+  if (pushHistory) {
+    history.pushState({ productId: product.id }, '', `#product-${product.id}`);
+  }
+
+  overlay?.classList.add("active");
+  overlay?.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function closeProductDrawer() {
+  const overlay = document.getElementById("product-drawer-overlay");
+  overlay?.classList.remove("active");
+  overlay?.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+
+  if (window.location.hash.startsWith("#product-")) {
+    history.pushState(null, '', window.location.pathname + window.location.search);
+  }
+}
+
+function updateDrawerSubtotal() {
+  if (!state.selectedDrawerProduct) return;
+  const p = state.selectedDrawerProduct;
+  const total = p.price * state.drawerQty;
+
+  const qtyEl = document.getElementById("drawer-qty-display");
+  const subtotalEl = document.getElementById("drawer-subtotal-price");
+  const waBtn = document.getElementById("btn-drawer-whatsapp");
+
+  if (qtyEl) qtyEl.textContent = state.drawerQty;
+  if (subtotalEl) subtotalEl.textContent = `${total.toLocaleString()} DA`;
+
+  if (waBtn) {
+    const text = encodeURIComponent(`Bonjour EAZYSTORE, je souhaite commander :\n📦 Produit : ${p.title}\n🔢 Quantité : ${state.drawerQty}\n💰 Total : ${total.toLocaleString()} DA\n\nMerci de m'indiquer la disponibilité et les modalités de livraison.`);
+    waBtn.href = `https://wa.me/213550000000?text=${text}`;
+  }
+}
+
+async function shareProduct() {
+  if (!state.selectedDrawerProduct) return;
+  const p = state.selectedDrawerProduct;
+  const shareUrl = `${window.location.origin}${window.location.pathname}#product-${p.id}`;
+  const shareData = {
+    title: `${p.title} - EAZYSTORE`,
+    text: `Découvrez ${p.title} sur EAZYSTORE au prix de ${p.price.toLocaleString()} DA !`,
+    url: shareUrl
+  };
+
+  if (navigator.share) {
+    try {
+      await navigator.share(shareData);
+    } catch (e) {
+      // User dismissed
+    }
+  } else {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      showToast("Lien du produit copié dans le presse-papier !", "check");
+    } catch (e) {
+      showToast("Partage : " + shareUrl, "info");
+    }
+  }
+}
+
+function checkUrlRoutes() {
+  checkAdminRoute();
+  checkProductRoute();
+}
+
+function checkProductRoute() {
+  const hash = window.location.hash;
+  if (hash.startsWith("#product-")) {
+    const prodId = parseInt(hash.replace("#product-", ""), 10);
+    if (!isNaN(prodId)) {
+      openProductDrawer(prodId, false);
+    }
+  } else {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has("product")) {
+      const prodId = parseInt(urlParams.get("product"), 10);
+      if (!isNaN(prodId)) {
+        openProductDrawer(prodId, false);
+      }
+    }
+  }
 }
 
 // Calculate Total (Product Price * Qty + Wilaya Shipping)
